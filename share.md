@@ -24,4 +24,4 @@
 
 
 ### 1. TWX的目录结构
-1. <a href="/code/index.html">index</a>
+1. <a href="https://worried-k.github.io/qunit/code/index.html">index</a>

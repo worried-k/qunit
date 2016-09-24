@@ -6,7 +6,7 @@ var path = require("path");
 var mime = require("./mime").types;
 var config = require("./config");
 var zlib = require("zlib");
-var home_path = process.cwd();
+var home_path = path.resolve(__dirname, '..');
 //创建http服务端
 var server=http.createServer(function(request,response){
     var obj= url.parse(request.url);
