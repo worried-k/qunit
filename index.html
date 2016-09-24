@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://localhost:8090/ -->
+<html lang="en" class=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Language" content="en">
+  <link rel="stylesheet" type="text/css" href="./index_files/github-syntax-highlight.css">
+  <link rel="stylesheet" type="text/css" href="./index_files/github-markdown.css">
+  <style>
+    .markdown-body {
+      min-width: 200px;
+      max-width: 790px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+  </style>
+  <script src="./index_files/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://localhost:8090/');
+    socket.on('connect', function () {
+      socket.on('newContent', function(newHTML) {
+        document.querySelector(".markdown-body").innerHTML = newHTML;
+      });
+      socket.on('die', function(newHTML) {
+        window.open('', '_self', '');
+        window.close();
+
+        var firefoxWarning =
+        "<h1>Oops!</h1>" +
+        "<h3>Firefox doesn't allow windows to self-close.</h3>" +
+        "<h3>If you want the preview window to close automatically like in other browsers, go to about:config and set dom.allow_scripts_to_close_windows to true.</h3>"
+        document.body.innerHTML = firefoxWarning;
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="repository-with-sidebar repo-container new-discussion-timeline with-full-navigation">
+        <div id="js-repo-pjax-container" class="repository-content context-loader-container">
+          <div id="readme" class="boxed-group flush clearfix announce instapaper_body md">
+            <article class="markdown-body"><h1>关于TWX的分享</h1>
+<blockquote>
+<h3>分享内容概览</h3>
+<ol>
+<li>整体目录结构</li>
+<li>页面组成部分（lua模板+js）</li>
+<li>关于js的doc文档</li>
+<li>setTimeout和setInterval与js的事件驱动机制（js与浏览器进程间的交互）</li>
+<li>flux在twx里的应用（数据驱动模型与dataStore）</li>
+<li>对js的函数和对象的理解（函数是js的精华）</li>
+<li>如何用js函数去创建一个对象，并为此函数扩展属性</li>
+<li>js闭包的应用</li>
+<li>慎用js中的关键字 this</li>
+<li>js将匿名函数作为参数传递</li>
+<li>js的引用传递，避免与利用</li>
+<li>ajax的异常处理，与递归调用</li>
+<li>script标签在html中的位置与原因</li>
+<li>js的局部函数化、模块化</li>
+<li>关于js的跨域（服务端添加response的http首部来避免跨域）</li>
+<li>关于js中的假值，所引起的异常判断</li>
+<li></li>
+<li></li>
+</ol>
+</blockquote>
+<h3>1. TWX的目录结构</h3>
+<ol>
+<li><a href="http://localhost:8090/code/index.html">index</a></li>
+</ol>
+</article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body></html>
