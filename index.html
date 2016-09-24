@@ -44,32 +44,253 @@
 <blockquote>
 <h3>分享内容概览</h3>
 <ol>
-<li>整体目录结构</li>
-<li>页面组成部分（lua模板+js）</li>
-<li>关于js的doc文档</li>
-<li>setTimeout和setInterval与js的事件驱动机制（js与浏览器进程间的交互）</li>
-<li>flux在twx里的应用（数据驱动模型与dataStore）</li>
-<li>对js的函数和对象的理解（函数是js的精华）</li>
-<li>如何用js函数去创建一个对象，并为此函数扩展属性</li>
-<li>js闭包的应用</li>
-<li>慎用js中的关键字 this</li>
-<li>js将匿名函数作为参数传递</li>
-<li>js的引用传递，避免与利用</li>
-<li>ajax的异常处理，与递归调用</li>
-<li>script标签在html中的位置与原因</li>
-<li>js的局部函数化、模块化</li>
-<li>关于js的跨域（服务端添加response的http首部来避免跨域）</li>
-<li>关于js中的假值，所引起的异常判断</li>
-<li></li>
-<li></li>
+<li><a href="http://localhost:8090/#p1">TWX整体目录结构</a></li>
+<li><a href="http://localhost:8090/#p2">单个页面组成部分</a>（lua模板+js）</li>
+<li><a href="http://localhost:8090/#https://worried-k.github.io/qunit/code/demo.html">flux在twx里的应用</a>（数据驱动模型与dataStore）</li>
+<li><a href="https://worried-k.github.io/twxDoc/">关于js的doc文档</a></li>
+<li><a href="http://localhost:8090/#p1">setTimeout和setInterval与js的事件驱动机制</a>（js与浏览器进程间的交互）</li>
+<li><a href="http://localhost:8090/#p1">对js的函数和对象的理解</a>（函数是js的精华）</li>
+<li><a href="http://localhost:8090/#p1">如何用js函数去创建一个对象，并为此函数扩展属性</a></li>
+<li><a href="http://localhost:8090/#p1">js闭包的应用</a></li>
+<li><a href="http://localhost:8090/#p1">慎用js中的关键字 this</a></li>
+<li><a href="http://localhost:8090/#p1">js将匿名函数作为参数传递</a></li>
+<li><a href="http://localhost:8090/#p1">js的引用传递，避免与利用</a></li>
+<li><a href="http://localhost:8090/#p1">ajax的异常处理，与递归调用</a></li>
+<li><a href="http://localhost:8090/#p1">script标签在html中的位置与原因</a></li>
+<li><a href="http://localhost:8090/#p1">js的局部函数化、模块化</a></li>
+<li><a href="http://localhost:8090/#p1">关于js的跨域（服务端添加response的http首部来避免跨域）</a></li>
+<li><a href="http://localhost:8090/#p1">关于js中的假值，所引起的异常判断</a></li>
 </ol>
 </blockquote>
-<h3>1. TWX的目录结构</h3>
-<ol>
-<li><a href="https://worried-k.github.io/qunit/code/index.html">index</a></li>
-<li></li>
-</ol>
-</article>
+<h3>1. <span id="p1">TWX的目录结构</span></h3>
+<pre><code>
+twx
+└── src
+    ├── etc
+    │&nbsp;&nbsp; ├── agreement ---首次安装的状态位配置文件
+    │&nbsp;&nbsp; ├── init.d ---子启动脚本文件夹
+    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── build_i18n ---生成js的i18n文件
+    │&nbsp;&nbsp; │&nbsp;&nbsp; └── build_loginpage ---生成静态登陆页
+    ├── usr
+    │&nbsp;&nbsp; └── lib
+    │&nbsp;&nbsp;  &nbsp;&nbsp; └── lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;     └── luci
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── dispatcher.lua ---luci的调度函数文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── util.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── version.lua ---版本配置文件，页面引用静态文件时用到了它里面的值。如：？v=&lt;%=ver.svnRevNum%&gt;
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── controller ---twx页面与twx自身api的调度与实现
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; ├── admin_mobile
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; └── index.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; ├── admin_web
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── guide.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── index.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; └── login.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; ├── admin_wp
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; └── index.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; ├── api
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; ├── index.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; └── guide_v2
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp;     ├── guide.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp;     └── index.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── ...
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── i18n ---i18n语言包
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; ├── eng.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; ├── oem.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; └── zh_cn.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── i18n.lua ---i18n对外函数功能实现
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; ├── local_ssh ---本地ssh的功能实现
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; ├── local_ssh.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; │&nbsp;&nbsp; └── local_ssh_util.lua
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp; └── view
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     ├── admin_mobile ---移动端页面的html模板文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── footer.htm ---html公共尾文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── header.htm ---html公共头文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── home.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── sysauth.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── network
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── system
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; └── wifi
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp;     ├── index.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp;     └── wifi_setup.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     ├── admin_web ---pc端页面的html模板文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── footer.htm ---html公共尾文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── header.htm ---html公共头文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── home.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── ap ---路由器为ap时的网络诊断页面
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── diagnose.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── error.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── menu
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── menu_left.htm ---pc端页面的左侧菜单
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── network
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── index.htm ---文件夹中的其他页面被include到此页面
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── passport
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── apps.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── guarantee.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── plugin
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── hua_san.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── index.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── logs.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── rui_jie.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── safe
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── black_list.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── index.htm ---文件夹中的其他页面被include到此页面
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── white_list.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── storage
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── index.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── samba.htm
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; ├── system
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── index.htm ---文件夹中的其他页面被include到此页面
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp; └── wifi
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp;     ├── index.htm ---文件夹中的其他页面被include到此页面
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     │&nbsp;&nbsp;     └── ...
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;     └── guide_v2 ---首次安装页面的html模板文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;         ├── agreement.htm ---系统中唯一的路由器使用协议
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;         ├── footer.htm ---html公共尾文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;         ├── header.htm ---html公共头文件
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;         ├── index.htm ---首次安装入口
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;         ├── first.htm ---首次安装入口
+    │&nbsp;&nbsp;  &nbsp;&nbsp;      &nbsp;&nbsp;         └── ...
+    └── www
+        ├── index.html ---twx入口文件
+        ├── favicon.ico
+        ├── 404.html
+        ├── 500.html
+        ├── local_ssh.html ---本地ssh入口文件
+        ├── login_mobile_backup.html
+        ├── login_mobile.html --静态登陆文件
+        ├── login_web_backup.html
+        ├── login_web.html --静态登陆文件
+        ├── net_detect.html --网络诊断入口文件
+        ├── robots.txt ---组织twx页面被爬虫抓取
+        ├── cgi-bin
+        │&nbsp;&nbsp; ├── proxy-cgi ---twx调用openapi时的代理cgi
+        │&nbsp;&nbsp; └── turbo
+        ├── demo
+        │&nbsp;&nbsp; └── ...
+        └── turbo-static
+            └── turbo
+                └── v2
+                    ├── img
+                    │&nbsp;&nbsp; ├── 2.4g@2x.png ---pc端图片
+                    │&nbsp;&nbsp; ├── ...
+                    │&nbsp;&nbsp; ├── admin_mobile ---移动端图片
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── ad-close.png
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── ...
+                    │&nbsp;&nbsp; ├── guide ---首次安装图片
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── an.png
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── ...
+                    │&nbsp;&nbsp; ├── net_detect_mobile
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── arrow-back.png
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── ...
+                    │&nbsp;&nbsp; ├── net_detect_web
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── arrow.png
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── ...
+                    ├── js
+                    │&nbsp;&nbsp; ├── g.js ---提供全局对象HiWiFi
+                    │&nbsp;&nbsp; ├── onerror.js ---js错误捕获，置前加载
+                    │&nbsp;&nbsp; ├── admin_mobile
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── general_module.js ---通用页面的逻辑处理
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── g.js ---独属于移动端模块的公共函数，HiWiFi对象的扩展
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── home.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...
+                    │&nbsp;&nbsp; ├── admin_web
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── general_module.js ---通用页面的逻辑处理
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── g.js ---独属于web端模块的公共函数，HiWiFi对象的扩展
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── home.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...
+                    │&nbsp;&nbsp; ├── boot_loader ---基础js类库，全局依赖的js库
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── jquery.min.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── json3.min.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; └── require.min.js ---一个JavaScript文件或者模块的加载器，暂未使用
+                    │&nbsp;&nbsp; ├── guide
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; └── ....
+                    │&nbsp;&nbsp; ├── i18n ---国际化js文件占位文件夹，里面的文件在路由器启动时生成
+                    │&nbsp;&nbsp; ├── lib ---公共的js类库，非全局依赖
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── dialog.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── jquery.datetimepicker.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── jquery.validate.config.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; ├── jquery.validate.js
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; └── pushstream.js
+                    │&nbsp;&nbsp; ├── openapi ---调用openapi接口的基于ajax的基础类库（twx中几乎所有的请求，都使用它）
+                    │&nbsp;&nbsp; │&nbsp;&nbsp; └── openapi.js
+                    │&nbsp;&nbsp; └── readme.txt
+                    └── style
+                        ├── admin_mobile ---移动端样式表
+                        │&nbsp;&nbsp; ├── g.css
+                        │&nbsp;&nbsp; └── net_detect.css
+                        ├── guide ---首次安装样式表
+                        │&nbsp;&nbsp; ├── 360.css
+                        │&nbsp;&nbsp; ├── ie8.css
+                        │&nbsp;&nbsp; ├── iphone4.css
+                        │&nbsp;&nbsp; └── ...
+                        ├── home.css ---pc端样式表
+                        ├── login.css
+                        └── ...
+</code></pre>
+<h3>2. <span id="p2">单个页面组成部分</span></h3>
+<h5>html模板的构成</h5>
+<pre><code>
+1.页面中需要执行的lua，写在文件头部
+2.include('header')
+3.引入样式表 href="../style/demo.css?v=&lt;%=ver.svnRevNum%&gt;"
+4.引入其他子页面
+    ...（本页html）
+    include('admin_web/menu/menu_left') ---引入pc端的左侧菜单（仅pc端模块主页面需引入）
+    ...（本页html）
+    include('demo/demo1') ---引入其他子页面
+    ...（本页html）
+5.include('footer')
+...
+6.引入通用模块的专属js文件： src=".../general_module.js?v=&lt;%=ver.svnRevNum%&gt;"
+7.引入本页的专属js文件： src=".../demo.js?v=&lt;%=ver.svnRevNum%&gt;"
+</code></pre>
+<h5>页面专属js文件的构成</h5>
+<pre><code>
+1.初始化数据仓库store
+    HiWiFi.dataStore({
+        demo_data: {
+            demo_name: ""
+        },
+        ...
+    });
+2.Interfaces列表（本页用到的所有的openapi接口）
+    //修改设备名称
+    function setDeviceName(request_data, successCallback, errorCallback) {
+       //...(写入数据类型 接口写前面)
+    }
+    ...
+    //检查系统是否需要升级
+    function checkRomUpdate(muti_call) {
+        //...(读取数据类型 接口写后面)
+        //ajax回调函数中执行：HiWiFi.dataStore.updateData("demo_data",{...})
+    }
+3.页面展现逻辑，依据dataStore中的数据模型，展现页面内容
+    var homeView = function () {
+        var controller_view = {
+            showViewRightInfo: function () {
+                var demo_data = HiWiFi.dataStore.getData("demo_data");
+                //...
+                if (demo_data.demo_name) {
+                    //操作dom
+                }
+            },
+            ...
+        };
+        //默认向controller_view中的函数添加dataStore事件监听
+        HiWiFi.dataStore.addChangeListenerFromCaller(controller_view);
+        return controller_view;
+    };
+4.Actions
+    4.1初始化页面
+    var controller_view = homeView();
+    4.2定义各种事件
+    4.3配置各个表单的，验证规则和提示
+</code></pre></article>
           </div>
         </div>
       </div>
