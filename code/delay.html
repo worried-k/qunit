@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>setTimeout测试</title>
+  <link rel="stylesheet" href="/qunit/lib/shCoreDefault.css">
+  <script src="/qunit/lib/jquery.js"></script>
+  <script src="/qunit/lib/g.js"></script>
+  <script src="/qunit/lib/shCore.js"></script>
+  <script src="/qunit/lib/shBrushJScript.js"></script>
+  <script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+    <pre class="brush:js;">
+      var num = 10000000000;
+      function test1() {
+        setTimeout(function() {
+          console.log("a")
+        });
+        location.href="http://tw/";
+        console.log("b");
+        setTimeout(function() {
+          console.log("c")
+        }, 100);
+        console.log("d");
+      }
+      function test2() {
+        setTimeout(function() {
+          console.log("a")
+        });
+        location.href="http://www.baidu.com/";
+        console.log("b");
+        setTimeout(function() {
+          console.log("c")
+        }, 100);
+        console.log("d")
+      }
+      function test3() {
+        setTimeout(function() {
+          console.log("a")
+        });
+        location.href="http://www.baidu.com/";
+        console.log("b");
+        setTimeout(function() {
+          console.log("c")
+        }, 100);
+        for (var i = 0; i < num; i++) {
+          num * num
+        }
+        console.log("d"); 
+      }
+      function test4() {
+        setTimeout(function() {
+          console.log("ok--2000")
+        }, 2000);
+        $("body").on("click", function () {
+            console.log("click")
+        });
+        setTimeout(function() {
+          console.log("ok--1000")
+        }, 1000);
+        for (var i = 0; i < num; i++) {
+          num * num
+        }
+        console.log("end")
+      }
+  </pre>
+  <script type="text/javascript">
+      var num = 10000000000;
+      function test1() {
+        setTimeout(function() {
+          console.log("a")
+        });
+        location.href="http://tw/";
+        console.log("b");
+        setTimeout(function() {
+          console.log("c")
+        }, 100);
+        console.log("d");
+      }
+      function test2() {
+        setTimeout(function() {
+          console.log("a")
+        });
+        location.href="http://www.baidu.com/";
+        console.log("b");
+        setTimeout(function() {
+          console.log("c")
+        }, 100);
+        console.log("d")
+      }
+      function test3() {
+        setTimeout(function() {
+          console.log("a")
+        });
+        location.href="http://www.baidu.com/";
+        console.log("b");
+        setTimeout(function() {
+          console.log("c")
+        }, 100);
+        for (var i = 0; i < num; i++) {
+          num * num
+        }
+        console.log("d"); 
+      }
+      function test4() {
+        setTimeout(function() {
+          console.log("ok--2000")
+        }, 2000);
+        $("body").on("click", function () {
+            console.log("click")
+        });
+        setTimeout(function() {
+          console.log("ok--1000")
+        }, 1000);
+        for (var i = 0; i < num; i++) {
+          num * num
+        }
+        console.log("end")
+      }
+  </script>
+</body>
+</html>
+

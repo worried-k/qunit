@@ -5,16 +5,16 @@
 >
 >1. [TWX整体目录结构](#p1)
 >1. [单个页面组成部分](#p2)（lua模板+js）
->1. [flux在twx里的应用](#https://worried-k.github.io/qunit/code/demo.html)（数据驱动模型与dataStore）
+>1. [flux在twx里的应用](https://worried-k.github.io/qunit/code/dataStore.html)（数据驱动模型与dataStore）
 >1. [关于js的doc文档](https://worried-k.github.io/twxDoc/)
->1. [setTimeout和setInterval与js的事件驱动机制](#p1)（js与浏览器进程间的交互）
+>1. [setTimeout和setInterval与js的事件驱动机制](https://worried-k.github.io/qunit/code/delay.html)（js与浏览器进程间的交互）
+>1. [ajax的异常处理，与递归调用](#p6)
 >1. [对js的函数和对象的理解](#p1)（函数是js的精华）
 >1. [如何用js函数去创建一个对象，并为此函数扩展属性](#p1)
 >1. [js闭包的应用](#p1)
 >1. [慎用js中的关键字 this](#p1)
 >1. [js将匿名函数作为参数传递](#p1)
 >1. [js的引用传递，避免与利用](#p1)
->1. [ajax的异常处理，与递归调用](#p1)
 >1. [script标签在html中的位置与原因](#p1)
 >1. [js的局部函数化、模块化](#p1)
 >1. [关于js的跨域（服务端添加response的http首部来避免跨域）](#p1)
@@ -251,4 +251,102 @@ twx
     var controller_view = homeView();
     4.2定义各种事件
     4.3配置各个表单的，验证规则和提示
+</code></pre>
+
+### 6. <span id="p6">ajax的异常处理，与递归调用</span>
+##### 在通过xmlHttpRequest对象时（同过ajax的非jsonp访问），处理异常是非常重要的，尤其是递归里调用ajax时。
+<pre><code>
+var xhr = $.ajax({
+    url: “”,
+    cache: false,
+    type: "POST",
+    async: true, //同步会影响页面的渲染--此处选择异步
+    dataType: "json",
+    data: JSON.stringify(ajaxData),//对象转字符串，千万不要拼字符串
+    timeout: 20000,//超时是一定要定义的
+    context: callbacks_context//各个回调函数的父对象,防止上下文丢失
+});
+</code></pre>
+<pre><code>
+xhr.done(function (rsp, status, xhr) {
+    var callbacks = $(this)[0];
+    if (rsp.code === 0 || rsp.code === "0") {
+        if (typeof callbacks.success === "function") {
+            //执行成功回调
+            callbacks.success(rsp, status, xhr);
+        }
+    } else {
+        if (rsp.code === 99999 || rsp.code === "99999") {
+            if (typeof callbacks.noAuthError === "function") {
+                //执行没有登陆权限的回调函数
+                callbacks.noAuthError(rsp);
+                return false;
+            }
+        }
+        
+        if (typeof callbacks.responseError === "function") {
+            //执行接口报错的回调函数
+            callbacks.responseError(rsp);
+        }
+    }
+});
+</code></pre>
+<pre><code>
+xhr.fail(function (e) {
+    var callbacks = $(this)[0];
+    if (e.status === 0) {
+        if (e.statusText === "abort") {
+            if (typeof callbacks.canceledError === "function") {
+                //http被取消时，所执行的回调函数（可能是浏览器取消的，或自己手动取消的）
+                callbacks.canceledError(e);
+                return false;
+            }
+        } else if (e.statusText === "timeout") {
+            if (typeof callbacks.timeoutError === "function") {
+                //接口超时 时执行的回调函数
+                callbacks.timeoutError(e);
+                return false;
+            }
+        }
+    }
+    if (typeof callbacks.requestError === "function") {
+            //在http请求失败，但没有失败原因时执行的回调
+            callbacks.requestError(rsp);
+        }
+});
+</code></pre>
+<pre><code>
+xhr.always(function (rsp) {
+    var callbacks = $(this)[0];
+    if (typeof callbacks.always === "function") {
+        //不论http请求成功或失败都应执行的回调
+        callbacks.always(rsp);
+    }
+});
+</code></pre>
+
+##### 递归里调用，需要注意异常时是否需要再次调用
+<pre><code>
+function demo(i) {
+    var xhr = $.ajax({
+    url: “”,
+    cache: false,
+    type: "POST",
+    ...
+    });
+    xhr.done(function (rsp, status, xhr) {
+        //正常此处需要处理
+        demo(i++);
+    });
+    xhr.fail(function (e) {
+        //异常此处需要处理,确定是否需要重试
+        setTimeout(function() {
+            demo(i);
+        }, 500);
+    });
+    xhr.always(function (rsp) {
+        //不论成功失败，都继续递归
+        demo(i++);
+    });
+}
 </code></pre>
