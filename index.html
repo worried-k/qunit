@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0022)http://localhost:8090/ -->
+<!-- saved from url=(0022)https://worried-k.github.io/ -->
 <html lang="en" class=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,25 +14,6 @@
       padding: 30px;
     }
   </style>
-  <script src="./index_files/socket.io.js"></script>
-  <script>
-    var socket = io.connect('http://localhost:8090/');
-    socket.on('connect', function () {
-      socket.on('newContent', function(newHTML) {
-        document.querySelector(".markdown-body").innerHTML = newHTML;
-      });
-      socket.on('die', function(newHTML) {
-        window.open('', '_self', '');
-        window.close();
-
-        var firefoxWarning =
-        "<h1>Oops!</h1>" +
-        "<h3>Firefox doesn't allow windows to self-close.</h3>" +
-        "<h3>If you want the preview window to close automatically like in other browsers, go to about:config and set dom.allow_scripts_to_close_windows to true.</h3>"
-        document.body.innerHTML = firefoxWarning;
-      });
-    });
-  </script>
 </head>
 <body>
   <div class="wrapper">
@@ -44,22 +25,22 @@
 <blockquote>
 <h3>分享内容概览</h3>
 <ol>
-<li><a href="http://localhost:8090/#p1">TWX整体目录结构</a></li>
-<li><a href="http://localhost:8090/#p2">单个页面组成部分</a>（lua模板+js）</li>
-<li><a href="http://localhost:8090/#https://worried-k.github.io/qunit/code/demo.html">flux在twx里的应用</a>（数据驱动模型与dataStore）</li>
+<li><a href="https://worried-k.github.io/#p1">TWX整体目录结构</a></li>
+<li><a href="https://worried-k.github.io/#p2">单个页面组成部分</a>（lua模板+js）</li>
+<li><a href="https://worried-k.github.io/qunit/code/demo.html">flux在twx里的应用</a>（数据驱动模型与dataStore）</li>
 <li><a href="https://worried-k.github.io/twxDoc/">关于js的doc文档</a></li>
-<li><a href="http://localhost:8090/#p1">setTimeout和setInterval与js的事件驱动机制</a>（js与浏览器进程间的交互）</li>
-<li><a href="http://localhost:8090/#p1">对js的函数和对象的理解</a>（函数是js的精华）</li>
-<li><a href="http://localhost:8090/#p1">如何用js函数去创建一个对象，并为此函数扩展属性</a></li>
-<li><a href="http://localhost:8090/#p1">js闭包的应用</a></li>
-<li><a href="http://localhost:8090/#p1">慎用js中的关键字 this</a></li>
-<li><a href="http://localhost:8090/#p1">js将匿名函数作为参数传递</a></li>
-<li><a href="http://localhost:8090/#p1">js的引用传递，避免与利用</a></li>
-<li><a href="http://localhost:8090/#p1">ajax的异常处理，与递归调用</a></li>
-<li><a href="http://localhost:8090/#p1">script标签在html中的位置与原因</a></li>
-<li><a href="http://localhost:8090/#p1">js的局部函数化、模块化</a></li>
-<li><a href="http://localhost:8090/#p1">关于js的跨域（服务端添加response的http首部来避免跨域）</a></li>
-<li><a href="http://localhost:8090/#p1">关于js中的假值，所引起的异常判断</a></li>
+<li><a href="https://worried-k.github.io/#p1">setTimeout和setInterval与js的事件驱动机制</a>（js与浏览器进程间的交互）</li>
+<li><a href="https://worried-k.github.io/#p1">对js的函数和对象的理解</a>（函数是js的精华）</li>
+<li><a href="https://worried-k.github.io/#p1">如何用js函数去创建一个对象，并为此函数扩展属性</a></li>
+<li><a href="https://worried-k.github.io/#p1">js闭包的应用</a></li>
+<li><a href="https://worried-k.github.io/#p1">慎用js中的关键字 this</a></li>
+<li><a href="https://worried-k.github.io/#p1">js将匿名函数作为参数传递</a></li>
+<li><a href="https://worried-k.github.io/#p1">js的引用传递，避免与利用</a></li>
+<li><a href="https://worried-k.github.io/#p1">ajax的异常处理，与递归调用</a></li>
+<li><a href="https://worried-k.github.io/#p1">script标签在html中的位置与原因</a></li>
+<li><a href="https://worried-k.github.io/#p1">js的局部函数化、模块化</a></li>
+<li><a href="https://worried-k.github.io/#p1">关于js的跨域（服务端添加response的http首部来避免跨域）</a></li>
+<li><a href="https://worried-k.github.io/#p1">关于js中的假值，所引起的异常判断</a></li>
 </ol>
 </blockquote>
 <h3>1. <span id="p1">TWX的目录结构</span></h3>

@@ -6,5 +6,5 @@ exports.Compress = {
     match: /css|js|html/ig
 };
 exports.Welcome = {
-    file: "code/index.html"
+    file: "/index.html"
 };
