@@ -5,9 +5,9 @@
 >
 >1. [TWX整体目录结构](#p1)
 >1. [单个页面组成部分](#p2)（lua模板+js）
->1. [flux在twx里的应用](https://worried-k.github.io/qunit/code/dataStore.html)（数据驱动模型与dataStore）
+>1. [flux在twx里的应用](https://worried-k.github.io/share/code/dataStore.html)（数据驱动模型与dataStore）
 >1. [关于js的doc文档](https://worried-k.github.io/twxDoc/)
->1. [setTimeout和setInterval与js的事件驱动机制](https://worried-k.github.io/qunit/code/delay.html)（js与浏览器进程间的交互）
+>1. [setTimeout和setInterval与js的事件驱动机制](https://worried-k.github.io/share/code/delay.html)（js与浏览器进程间的交互）
 >1. [ajax的异常处理，与递归调用](#p6)
 >1. [如何用js函数去创建一个对象，并为此函数扩展属性](#p7)
 >1. [js闭包的应用](#p8)

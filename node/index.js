@@ -17,8 +17,8 @@ var server=http.createServer(function(request,response){
     }
     var realPath = path.join(home_path, path.normalize(pathname.replace(/\.\./g, "")));
     
-    if (realPath.indexOf("/qunit/qunit/") > -1) {
-        realPath = realPath.replace('/qunit/qunit/', '/qunit/');
+    if (realPath.indexOf("/share/share/") > -1) {
+        realPath = realPath.replace('/share/share/', '/share/');
     }
 
     //console.log(realPath) ;
