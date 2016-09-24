@@ -9,16 +9,10 @@
 >1. [关于js的doc文档](https://worried-k.github.io/twxDoc/)
 >1. [setTimeout和setInterval与js的事件驱动机制](https://worried-k.github.io/qunit/code/delay.html)（js与浏览器进程间的交互）
 >1. [ajax的异常处理，与递归调用](#p6)
->1. [对js的函数和对象的理解](#p1)（函数是js的精华）
->1. [如何用js函数去创建一个对象，并为此函数扩展属性](#p1)
->1. [js闭包的应用](#p1)
->1. [慎用js中的关键字 this](#p1)
->1. [js将匿名函数作为参数传递](#p1)
->1. [js的引用传递，避免与利用](#p1)
->1. [script标签在html中的位置与原因](#p1)
->1. [js的局部函数化、模块化](#p1)
->1. [关于js的跨域（服务端添加response的http首部来避免跨域）](#p1)
->1. [关于js中的假值，所引起的异常判断](#p1)
+>1. [如何用js函数去创建一个对象，并为此函数扩展属性](#p7)
+>1. [js闭包的应用](#p8)
+>1. [关于js的跨域（服务端添加response的http首部来避免跨域）](http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html)
+>1. [关于js中的假值，所引起的异常判断](http://worried-k.github.io/myblog/2016/03/22/false-value-in-javascrpt.html)
 
 ### 1. <span id="p1">TWX的目录结构</span>
 <pre><code>
@@ -204,7 +198,7 @@ twx
     ...（本页html）
     include('demo/demo1') ---引入其他子页面
     ...（本页html）
-5.include('footer')
+5.include('footer') ---js文件一定要放在html底部，因为js的执行会阻塞线程
 ...
 6.引入通用模块的专属js文件： src=".../general_module.js?v=<%=ver.svnRevNum%>"
 7.引入本页的专属js文件： src=".../demo.js?v=<%=ver.svnRevNum%>"
@@ -349,4 +343,48 @@ function demo(i) {
         demo(i++);
     });
 }
+</code></pre>
+
+### 7. <span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span>
+<pre><code>
+function demo() {
+    demo.say();
+    demo.name = "kp";
+    demo.say();
+}
+demo.name = "demo";
+demo.say = function() {
+    console.log(demo.name);
+}
+demo.sayNo = function() {
+    console.log("no");
+}
+
+//词法作用域哦！
+demo();
+demo.sayNo();
+</code></pre>
+
+### 8. <span id="p8">js闭包的应用</span>
+<pre><code>
+function demo() {
+    var cache = 0;
+    return {
+        addOne: function() {
+            cache ++;
+        },
+        show: function() {
+            console.log(cache);
+        }
+    };
+}
+
+var dd = demo();
+dd.addOne();
+dd.addOne();
+dd.show(); //2
+dd.addOne();
+dd.addOne();
+dd.addOne();
+dd.show(); //5
 </code></pre>

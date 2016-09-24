@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0025)https://worried-k.github.io/qunit/#p6 -->
+<!-- saved from url=(0025)https://worried-k.github.io/qunit/#p8 -->
 <html lang="en" class=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,16 +31,10 @@
 <li><a href="https://worried-k.github.io/twxDoc/">关于js的doc文档</a></li>
 <li><a href="https://worried-k.github.io/qunit/code/delay.html">setTimeout和setInterval与js的事件驱动机制</a>（js与浏览器进程间的交互）</li>
 <li><a href="https://worried-k.github.io/qunit/#p6">ajax的异常处理，与递归调用</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">对js的函数和对象的理解</a>（函数是js的精华）</li>
-<li><a href="https://worried-k.github.io/qunit/#p1">如何用js函数去创建一个对象，并为此函数扩展属性</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">js闭包的应用</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">慎用js中的关键字 this</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">js将匿名函数作为参数传递</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">js的引用传递，避免与利用</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">script标签在html中的位置与原因</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">js的局部函数化、模块化</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">关于js的跨域（服务端添加response的http首部来避免跨域）</a></li>
-<li><a href="https://worried-k.github.io/qunit/#p1">关于js中的假值，所引起的异常判断</a></li>
+<li><a href="https://worried-k.github.io/qunit/#p7">如何用js函数去创建一个对象，并为此函数扩展属性</a></li>
+<li><a href="https://worried-k.github.io/qunit/#p8">js闭包的应用</a></li>
+<li><a href="http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html">关于js的跨域（服务端添加response的http首部来避免跨域）</a></li>
+<li><a href="http://worried-k.github.io/myblog/2016/03/22/false-value-in-javascrpt.html">关于js中的假值，所引起的异常判断</a></li>
 </ol>
 </blockquote>
 <h3>1. <span id="p1">TWX的目录结构</span></h3>
@@ -225,7 +219,7 @@ twx
     ...（本页html）
     include('demo/demo1') ---引入其他子页面
     ...（本页html）
-5.include('footer')
+5.include('footer') ---js文件一定要放在html底部，因为js的执行会阻塞线程
 ...
 6.引入通用模块的专属js文件： src=".../general_module.js?v=&lt;%=ver.svnRevNum%&gt;"
 7.引入本页的专属js文件： src=".../demo.js?v=&lt;%=ver.svnRevNum%&gt;"
@@ -367,7 +361,48 @@ function demo(i) {
         demo(i++);
     });
 }
-</code></pre></article>
+</code></pre>
+<h3>7. <span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span></h3>
+<pre><code>
+function demo() {
+    demo.say();
+    demo.name = "kp";
+    demo.say();
+}
+demo.name = "demo";
+demo.say = function() {
+    console.log(demo.name);
+}
+demo.sayNo = function() {
+    console.log("no");
+}
+</code><p><code><a href="http://xn--2qqw8khvchy5aqqjyh8a/">//词法作用域哦</a>！
+demo();
+demo.sayNo();
+</code></p></pre><p></p>
+<h3>8. <span id="p8">js闭包的应用</span></h3>
+<pre><code>
+function demo() {
+    var cache = 0;
+    return {
+        addOne: function() {
+            cache ++;
+        },
+        show: function() {
+            console.log(cache);
+        }
+    };
+}
+</code><p><code>var dd = demo();
+dd.addOne();
+dd.addOne();
+dd.show(); //2
+dd.addOne();
+dd.addOne();
+dd.addOne();
+dd.show(); //5
+</code></p></pre><p></p>
+</article>
           </div>
         </div>
       </div>
