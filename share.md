@@ -3,24 +3,24 @@
 
 >### 分享内容概览
 >
->1. [TWX整体目录结构](#p1)
->1. [单个页面组成部分](#p2)（lua模板+js）
->1. [flux在twx里的应用](https://worried-k.github.io/share/code/dataStore.html)（数据驱动模型与dataStore）
->1. [关于js的doc文档](https://worried-k.github.io/twxDoc/)
+>1. [TWX的整体目录结构](#p1)
+>1. [单个页面html和js的结构](#p2)（lua模板+js）
+>1. [flux架构](#p3) and [在twx里的应用](https://worried-k.github.io/share/code/dataStore.html)（数据驱动模型与dataStore）
+>1. [关于js的doc文档](https://worried-k.github.io/twxDoc/)(两个全局对象，和几个拥有不同功能的子对象)
 >1. [setTimeout和setInterval与js的事件驱动机制](https://worried-k.github.io/share/code/delay.html)（js与浏览器进程间的交互）
 >1. [ajax的异常处理，与递归调用](#p6)
 >1. [如何用js函数去创建一个对象，并为此函数扩展属性](#p7)
->1. [js闭包的应用](#p8)
->1. [关于js的跨域（服务端添加response的http首部来避免跨域）](http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html)
+>1. [js闭包的简单应用](#p8)
+>1. [关于js的跨域（介绍：服务端添加response的http首部来避免跨域）](http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html)
 >1. [关于js中的假值，所引起的异常判断](http://worried-k.github.io/myblog/2016/03/22/false-value-in-javascrpt.html)
 
-### 1. <span id="p1">TWX的目录结构</span>
+### 1. <span id="p1">TWX的整体目录结构</span>
 <pre><code>
 twx
 └── src
     ├── etc
     │   ├── agreement ---首次安装的状态位配置文件
-    │   ├── init.d ---子启动脚本文件夹
+    │   ├── init.d ---自启动脚本文件夹
     │   │   ├── build_i18n ---生成js的i18n文件
     │   │   └── build_loginpage ---生成静态登陆页
     ├── usr
@@ -185,11 +185,11 @@ twx
                         └── ...
 </code></pre>
 
-### 2. <span id="p2">单个页面组成部分</span>
+### 2. <span id="p2">单个页面html和js的结构</span>
 
-##### html模板的构成
+##### html模板的构成（lua + html）
 <pre><code>
-1.页面中需要执行的lua，写在文件头部
+1.页面中需要引入和执行的lua，写在文件头部
 2.include('header')
 3.引入样式表 href="../style/demo.css?v=<%=ver.svnRevNum%>"
 4.引入其他子页面
@@ -204,7 +204,13 @@ twx
 7.引入本页的专属js文件： src=".../demo.js?v=<%=ver.svnRevNum%>"
 </code></pre>
 
-##### 页面专属js文件的构成
+##### 页面专属js文件的构成（每个页面都有其专属的js文件）
+* 每个页面的结构都是这样的
+* 页面展现中用到的所用的数据，都来自dataStore中已经定义的对象
+* 页面逻辑中，用的到的所有接口 都在Interfaces列表 中
+* 页面展现逻辑的对象中，它的每个方法都只负责页面中的一个局部模块的渲染
+* 页面的初始化，和其他的事件，都定义在文件的底部，也就是Actions模块
+* 文件整体呈现出 函数化 + 模块化
 <pre><code>
 1.初始化数据仓库store
     HiWiFi.dataStore({
@@ -247,8 +253,19 @@ twx
     4.3配置各个表单的，验证规则和提示
 </code></pre>
 
+### 3. <span id="p3">flux架构</span>
+
+##### Flux是什么
+Flux是Facebook用来构建客户端Web应用的应用架构。它利用 ***单向数据流*** 的方式来组合视图组件。它更像一个模式而不是一个正式的框架
+
+##### 单向数据流模型
+![flux架构](http://cc.cocimg.com/api/uploads/20150928/1443408151189585.jpg "Optional title")
+
+
 ### 6. <span id="p6">ajax的异常处理，与递归调用</span>
 ##### 在通过xmlHttpRequest对象时（同过ajax的非jsonp访问），处理异常是非常重要的，尤其是递归里调用ajax时。
+* 推荐使用 $.ajax 的方式发起请求，保证代码格式统一，格式明了
+* 对于每一个请求都应该认真对待它的每一个结果
 <pre><code>
 var xhr = $.ajax({
     url: “”,
@@ -277,7 +294,6 @@ xhr.done(function (rsp, status, xhr) {
                 return false;
             }
         }
-        
         if (typeof callbacks.responseError === "function") {
             //执行接口报错的回调函数
             callbacks.responseError(rsp);
@@ -346,12 +362,19 @@ function demo(i) {
 </code></pre>
 
 ### 7. <span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span>
+
+###### 优点：
+* 可以缩短函数在调用时书写的长度（如：$("#id")和$.each()都是JQuery函数的使用方式）
+* 可以这样理解： $("#id") == $.initElement("#id") (ps:"initElement"是虚构的函数)
+* 猜想下，下面代码的输出结果 ^_^ （js应用的是词法作用域哦！）
+
 <pre><code>
 function demo() {
     demo.say();
     demo.name = "kp";
     demo.say();
 }
+
 demo.name = "demo";
 demo.say = function() {
     console.log(demo.name);
@@ -360,12 +383,37 @@ demo.sayNo = function() {
     console.log("no");
 }
 
-//词法作用域哦！
 demo();
 demo.sayNo();
 </code></pre>
 
-### 8. <span id="p8">js闭包的应用</span>
+* 可以了解下：jQuery.extend(target, object1, [objectN])的使用方式（向前合并对象,即：用一个或多个其他对象来扩展一个对象，返回被扩展的对象）
+* 上面的例子用这个函数后，就可以写成这样了（模块化，利于扩展）
+
+<pre><code>
+function demo() {
+    demo.say();
+    demo.name = "kp";
+    demo.say();
+}
+jQuery.extend(demo, {
+    name: "demo",
+    say: function() {
+        console.log(demo.name);
+    },
+    sayNo: function() {
+        console.log("no");
+    }
+})
+</code></pre>
+
+### 8. <span id="p8">js闭包的简单应用</span>
+
+###### 优点：
+* 实际开发中可以用像下面这样的方式来创建对象来避免 new 关键字的使用（return返回的对象即为新生成的对象）
+* 可以读取函数的内部变量--前提：通过函数对象提供的指定方法（数据私有化，保证数据安全）
+* 这些变量的值会始终保持在内存中(可以用来缓存页面展现或操作过程中需要记录的值，而不会像全局变量似的造成变量污染)
+
 <pre><code>
 function demo() {
     var cache = 0;

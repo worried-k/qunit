@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0025)https://worried-k.github.io/share/#p8 -->
+<!-- saved from url=(0025)https://worried-k.github.io/share/#p2 -->
 <html lang="en" class=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,25 +25,25 @@
 <blockquote>
 <h3>分享内容概览</h3>
 <ol>
-<li><a href="https://worried-k.github.io/share/#p1">TWX整体目录结构</a></li>
-<li><a href="https://worried-k.github.io/share/#p2">单个页面组成部分</a>（lua模板+js）</li>
-<li><a href="https://worried-k.github.io/share/code/dataStore.html">flux在twx里的应用</a>（数据驱动模型与dataStore）</li>
-<li><a href="https://worried-k.github.io/twxDoc/">关于js的doc文档</a></li>
+<li><a href="https://worried-k.github.io/share/#p1">TWX的整体目录结构</a></li>
+<li><a href="https://worried-k.github.io/share/#p2">单个页面html和js的结构</a>（lua模板+js）</li>
+<li><a href="https://worried-k.github.io/share/#p3">flux架构</a> and <a href="https://worried-k.github.io/share/code/dataStore.html">在twx里的应用</a>（数据驱动模型与dataStore）</li>
+<li><a href="https://worried-k.github.io/twxDoc/">关于js的doc文档</a>(两个全局对象，和几个拥有不同功能的子对象)</li>
 <li><a href="https://worried-k.github.io/share/code/delay.html">setTimeout和setInterval与js的事件驱动机制</a>（js与浏览器进程间的交互）</li>
 <li><a href="https://worried-k.github.io/share/#p6">ajax的异常处理，与递归调用</a></li>
 <li><a href="https://worried-k.github.io/share/#p7">如何用js函数去创建一个对象，并为此函数扩展属性</a></li>
-<li><a href="https://worried-k.github.io/share/#p8">js闭包的应用</a></li>
-<li><a href="http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html">关于js的跨域（服务端添加response的http首部来避免跨域）</a></li>
+<li><a href="https://worried-k.github.io/share/#p8">js闭包的简单应用</a></li>
+<li><a href="http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html">关于js的跨域（介绍：服务端添加response的http首部来避免跨域）</a></li>
 <li><a href="http://worried-k.github.io/myblog/2016/03/22/false-value-in-javascrpt.html">关于js中的假值，所引起的异常判断</a></li>
 </ol>
 </blockquote>
-<h3>1. <span id="p1">TWX的目录结构</span></h3>
+<h3>1. <span id="p1">TWX的整体目录结构</span></h3>
 <pre><code>
 twx
 └── src
     ├── etc
     │&nbsp;&nbsp; ├── agreement ---首次安装的状态位配置文件
-    │&nbsp;&nbsp; ├── init.d ---子启动脚本文件夹
+    │&nbsp;&nbsp; ├── init.d ---自启动脚本文件夹
     │&nbsp;&nbsp; │&nbsp;&nbsp; ├── build_i18n ---生成js的i18n文件
     │&nbsp;&nbsp; │&nbsp;&nbsp; └── build_loginpage ---生成静态登陆页
     ├── usr
@@ -207,10 +207,10 @@ twx
                         ├── login.css
                         └── ...
 </code></pre>
-<h3>2. <span id="p2">单个页面组成部分</span></h3>
-<h5>html模板的构成</h5>
+<h3>2. <span id="p2">单个页面html和js的结构</span></h3>
+<h5>html模板的构成（lua + html）</h5>
 <pre><code>
-1.页面中需要执行的lua，写在文件头部
+1.页面中需要引入和执行的lua，写在文件头部
 2.include('header')
 3.引入样式表 href="../style/demo.css?v=&lt;%=ver.svnRevNum%&gt;"
 4.引入其他子页面
@@ -224,7 +224,15 @@ twx
 6.引入通用模块的专属js文件： src=".../general_module.js?v=&lt;%=ver.svnRevNum%&gt;"
 7.引入本页的专属js文件： src=".../demo.js?v=&lt;%=ver.svnRevNum%&gt;"
 </code></pre>
-<h5>页面专属js文件的构成</h5>
+<h5>页面专属js文件的构成（每个页面都有其专属的js文件）</h5>
+<ul>
+<li>每个页面的结构都是这样的</li>
+<li>页面展现中用到的所用的数据，都来自dataStore中已经定义的对象</li>
+<li>页面逻辑中，用的到的所有接口 都在Interfaces列表 中</li>
+<li>页面展现逻辑的对象中，它的每个方法都只负责页面中的一个局部模块的渲染</li>
+<li>页面的初始化，和其他的事件，都定义在文件的底部，也就是Actions模块</li>
+<li>文件整体呈现出 函数化 + 模块化</li>
+</ul>
 <pre><code>
 1.初始化数据仓库store
     HiWiFi.dataStore({
@@ -266,8 +274,17 @@ twx
     4.2定义各种事件
     4.3配置各个表单的，验证规则和提示
 </code></pre>
+<h3>3. <span id="p3">flux架构</span></h3>
+<h5>Flux是什么</h5>
+<p>Flux是Facebook用来构建客户端Web应用的应用架构。它利用 <strong><em>单向数据流</em></strong> 的方式来组合视图组件。它更像一个模式而不是一个正式的框架</p>
+<h5>单向数据流模型</h5>
+<p><img src="./index_files/1443408151189585.jpg" alt="flux架构" title="Optional title"></p>
 <h3>6. <span id="p6">ajax的异常处理，与递归调用</span></h3>
 <h5>在通过xmlHttpRequest对象时（同过ajax的非jsonp访问），处理异常是非常重要的，尤其是递归里调用ajax时。</h5>
+<ul>
+<li>推荐使用 $.ajax 的方式发起请求，保证代码格式统一，格式明了</li>
+<li>对于每一个请求都应该认真对待它的每一个结果</li>
+</ul>
 <pre><code>
 var xhr = $.ajax({
     url: “”,
@@ -296,14 +313,13 @@ xhr.done(function (rsp, status, xhr) {
                 return false;
             }
         }
-<pre><code>    if (typeof callbacks.responseError === "function") {
-        //执行接口报错的回调函数
-        callbacks.responseError(rsp);
+        if (typeof callbacks.responseError === "function") {
+            //执行接口报错的回调函数
+            callbacks.responseError(rsp);
+        }
     }
-}
+});
 </code></pre>
-</code><p><code>});
-</code></p></pre><p></p>
 <pre><code>
 xhr.fail(function (e) {
     var callbacks = $(this)[0];
@@ -363,24 +379,55 @@ function demo(i) {
 }
 </code></pre>
 <h3>7. <span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span></h3>
+<h6>优点：</h6>
+<ul>
+<li>可以缩短函数在调用时书写的长度（如：$("#id")和$.each()都是JQuery函数的使用方式）</li>
+<li>可以这样理解： $("#id") == $.initElement("#id") (ps:"initElement"是虚构的函数)</li>
+<li>猜想下，下面代码的输出结果 ^_^ （js应用的是词法作用域哦！）</li>
+</ul>
 <pre><code>
 function demo() {
     demo.say();
     demo.name = "kp";
     demo.say();
 }
-demo.name = "demo";
+<p><a href="http://demo.name/">demo.name</a> = "demo";
 demo.say = function() {
-    console.log(demo.name);
+console.log(<a href="http://demo.name/">demo.name</a>);
 }
 demo.sayNo = function() {
-    console.log("no");
-}
-</code><p><code><a href="http://xn--2qqw8khvchy5aqqjyh8a/">//词法作用域哦</a>！
-demo();
+console.log("no");
+}</p>
+</code><p><code>demo();
 demo.sayNo();
 </code></p></pre><p></p>
-<h3>8. <span id="p8">js闭包的应用</span></h3>
+<ul>
+<li>可以了解下：jQuery.extend(target, object1, [objectN])的使用方式（向前合并对象,即：用一个或多个其他对象来扩展一个对象，返回被扩展的对象）</li>
+<li>上面的例子用这个函数后，就可以写成这样了（模块化，利于扩展）</li>
+</ul>
+<pre><code>
+function demo() {
+    demo.say();
+    demo.name = "kp";
+    demo.say();
+}
+jQuery.extend(demo, {
+    name: "demo",
+    say: function() {
+        console.log(demo.name);
+    },
+    sayNo: function() {
+        console.log("no");
+    }
+})
+</code></pre>
+<h3>8. <span id="p8">js闭包的简单应用</span></h3>
+<h6>优点：</h6>
+<ul>
+<li>实际开发中可以用像下面这样的方式来创建对象来避免 new 关键字的使用（return返回的对象即为新生成的对象）</li>
+<li>可以读取函数的内部变量--前提：通过函数对象提供的指定方法（数据私有化，保证数据安全）</li>
+<li>这些变量的值会始终保持在内存中(可以用来缓存页面展现或操作过程中需要记录的值，而不会像全局变量似的造成变量污染)</li>
+</ul>
 <pre><code>
 function demo() {
     var cache = 0;
