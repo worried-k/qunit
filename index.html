@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0025)https://worried-k.github.io/share/#p2 -->
+<!-- saved from url=(0025)https://worried-k.github.io/share/#p1 -->
 <html lang="en" class=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,23 +21,43 @@
       <div class="repository-with-sidebar repo-container new-discussion-timeline with-full-navigation">
         <div id="js-repo-pjax-container" class="repository-content context-loader-container">
           <div id="readme" class="boxed-group flush clearfix announce instapaper_body md">
-            <article class="markdown-body"><h1>关于TWX的分享</h1>
-<blockquote>
+            <article class="markdown-body"><h1>一个小小的分享</h1>
 <h3>分享内容概览</h3>
+<blockquote>
+<h6>关于TWX</h6>
 <ol>
 <li><a href="https://worried-k.github.io/share/#p1">TWX的整体目录结构</a></li>
-<li><a href="https://worried-k.github.io/share/#p2">单个页面html和js的结构</a>（lua模板+js）</li>
-<li><a href="https://worried-k.github.io/share/#p3">flux架构</a> and <a href="https://worried-k.github.io/share/code/dataStore.html">在twx里的应用</a>（数据驱动模型与dataStore）</li>
+<li><a href="https://worried-k.github.io/share/#p2">单个页面html和js的架构</a>（lua模板+js）</li>
 <li><a href="https://worried-k.github.io/twxDoc/">关于js的doc文档</a>(两个全局对象，和几个拥有不同功能的子对象)</li>
-<li><a href="https://worried-k.github.io/share/code/delay.html">setTimeout和setInterval与js的事件驱动机制</a>（js与浏览器进程间的交互）</li>
+</ol>
+</blockquote>
+<blockquote>
+<h6>应用在TWX页面中的架构</h6>
+<ol>
+<li><a href="https://worried-k.github.io/share/#p3">flux架构</a></li>
+<li><a href="https://worried-k.github.io/share/code/dataStore.html">flux在TWX中的应用---缩减版demo</a>（数据驱动模型与dataStore）</li>
+</ol>
+</blockquote>
+<blockquote>
+<h6>小常识</h6>
+<ol>
 <li><a href="https://worried-k.github.io/share/#p6">ajax的异常处理，与递归调用</a></li>
 <li><a href="https://worried-k.github.io/share/#p7">如何用js函数去创建一个对象，并为此函数扩展属性</a></li>
 <li><a href="https://worried-k.github.io/share/#p8">js闭包的简单应用</a></li>
-<li><a href="http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html">关于js的跨域（介绍：服务端添加response的http首部来避免跨域）</a></li>
+<li><a href="https://worried-k.github.io/share/code/delay.html">setTimeout和setInterval与js的事件驱动机制</a>（js与浏览器进程间的交互）</li>
+<li><a href="http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html">关于js的跨域</a>（介绍：服务端添加response的http首部来避免跨域）</li>
 <li><a href="http://worried-k.github.io/myblog/2016/03/22/false-value-in-javascrpt.html">关于js中的假值，所引起的异常判断</a></li>
 </ol>
 </blockquote>
-<h3>1. <span id="p1">TWX的整体目录结构</span></h3>
+<blockquote>
+<p>Q &amp; A</p>
+</blockquote>
+<h3><span id="p1">TWX的整体目录结构</span></h3>
+<ul>
+<li>页面访问流程：http ==&gt; dns(解析到路由器本地) ==&gt; nginx ==&gt; fcgi ==&gt; luci</li>
+<li>服务端脚本语言： lua</li>
+<li>twx的src下目录的文件结构 与 路由器 的根目录结构是一致的</li>
+</ul>
 <pre><code>
 twx
 └── src
@@ -207,7 +227,7 @@ twx
                         ├── login.css
                         └── ...
 </code></pre>
-<h3>2. <span id="p2">单个页面html和js的结构</span></h3>
+<h3><span id="p2">单个页面html和js的架构</span></h3>
 <h5>html模板的构成（lua + html）</h5>
 <pre><code>
 1.页面中需要引入和执行的lua，写在文件头部
@@ -274,12 +294,29 @@ twx
     4.2定义各种事件
     4.3配置各个表单的，验证规则和提示
 </code></pre>
-<h3>3. <span id="p3">flux架构</span></h3>
+<h3><span id="p3">flux架构</span></h3>
 <h5>Flux是什么</h5>
 <p>Flux是Facebook用来构建客户端Web应用的应用架构。它利用 <strong><em>单向数据流</em></strong> 的方式来组合视图组件。它更像一个模式而不是一个正式的框架</p>
 <h5>单向数据流模型</h5>
 <p><img src="./index_files/1443408151189585.jpg" alt="flux架构" title="Optional title"></p>
-<h3>6. <span id="p6">ajax的异常处理，与递归调用</span></h3>
+<ol>
+<li>
+<p>dispatcher</p>
+<p>事件调度中心，flux模型的中心枢纽，管理着Flux应用中的所有数据流。它本质上是Store的回调注册。每个Store注册它自己并提供一个回调函数。当Dispatcher响应Action时，通过已注册的回调函数，将Action提供的数据负载发送给应用中的所有Store。应用层级单例！！</p>
+</li>
+<li>
+<p>store</p>
+<p>负责封装应用的业务逻辑跟数据的交互。</p>
+<p>Store中包含应用所有的数据
+Store是应用中唯一的数据发生变更的地方
+Store中没有赋值接口---所有数据变更都是由dispatcher发送到store，新的数据随着Store触发的change事件传回view。Store对外只暴露getter，不允许提供setter！！禁止在任何地方直接操作Store。</p>
+</li>
+<li>
+<p>view</p>
+<p>controller-view 可以理解成MVC模型中的controller，它一般由应用的顶层容器充当，负责从store中获取数据并将数据传递到子组件中。简单的应用一般只有一个controller-view，复杂应用中也可以有多个。controller-view是应用中唯一可以操作view(UI组件)的地方，职责单一只允许调用action触发事件，数据从由上层容器通过属性传递过来。</p>
+</li>
+</ol>
+<h3><span id="p6">ajax的异常处理，与递归调用</span></h3>
 <h5>在通过xmlHttpRequest对象时（同过ajax的非jsonp访问），处理异常是非常重要的，尤其是递归里调用ajax时。</h5>
 <ul>
 <li>推荐使用 $.ajax 的方式发起请求，保证代码格式统一，格式明了</li>
@@ -378,7 +415,7 @@ function demo(i) {
     });
 }
 </code></pre>
-<h3>7. <span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span></h3>
+<h3><span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span></h3>
 <h6>优点：</h6>
 <ul>
 <li>可以缩短函数在调用时书写的长度（如：$("#id")和$.each()都是JQuery函数的使用方式）</li>
@@ -421,7 +458,7 @@ jQuery.extend(demo, {
     }
 })
 </code></pre>
-<h3>8. <span id="p8">js闭包的简单应用</span></h3>
+<h3><span id="p8">js闭包的简单应用</span></h3>
 <h6>优点：</h6>
 <ul>
 <li>实际开发中可以用像下面这样的方式来创建对象来避免 new 关键字的使用（return返回的对象即为新生成的对象）</li>

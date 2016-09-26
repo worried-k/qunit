@@ -1,20 +1,31 @@
-关于TWX的分享
+一个小小的分享
 ===
 
->### 分享内容概览
->
+### 分享内容概览
+
+> ###### 关于TWX
 >1. [TWX的整体目录结构](#p1)
->1. [单个页面html和js的结构](#p2)（lua模板+js）
->1. [flux架构](#p3) and [在twx里的应用](https://worried-k.github.io/share/code/dataStore.html)（数据驱动模型与dataStore）
+>1. [单个页面html和js的架构](#p2)（lua模板+js）
 >1. [关于js的doc文档](https://worried-k.github.io/twxDoc/)(两个全局对象，和几个拥有不同功能的子对象)
->1. [setTimeout和setInterval与js的事件驱动机制](https://worried-k.github.io/share/code/delay.html)（js与浏览器进程间的交互）
+
+>###### 应用在TWX页面中的架构
+>1. [flux架构](#p3)
+>2. [flux在TWX中的应用---缩减版demo](https://worried-k.github.io/share/code/dataStore.html)（数据驱动模型与dataStore）
+
+>###### 小常识
 >1. [ajax的异常处理，与递归调用](#p6)
 >1. [如何用js函数去创建一个对象，并为此函数扩展属性](#p7)
 >1. [js闭包的简单应用](#p8)
->1. [关于js的跨域（介绍：服务端添加response的http首部来避免跨域）](http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html)
+>1. [setTimeout和setInterval与js的事件驱动机制](https://worried-k.github.io/share/code/delay.html)（js与浏览器进程间的交互）
+>1. [关于js的跨域](http://worried-k.github.io/myblog/2016/03/26/cross-in-javascrpt.html)（介绍：服务端添加response的http首部来避免跨域）
 >1. [关于js中的假值，所引起的异常判断](http://worried-k.github.io/myblog/2016/03/22/false-value-in-javascrpt.html)
 
-### 1. <span id="p1">TWX的整体目录结构</span>
+> Q & A
+
+### <span id="p1">TWX的整体目录结构</span>
+* 页面访问流程：http ==> dns(解析到路由器本地) ==> nginx ==> fcgi ==> luci
+* 服务端脚本语言： lua
+* twx的src下目录的文件结构 与 路由器 的根目录结构是一致的
 <pre><code>
 twx
 └── src
@@ -185,7 +196,7 @@ twx
                         └── ...
 </code></pre>
 
-### 2. <span id="p2">单个页面html和js的结构</span>
+### <span id="p2">单个页面html和js的架构</span>
 
 ##### html模板的构成（lua + html）
 <pre><code>
@@ -253,7 +264,7 @@ twx
     4.3配置各个表单的，验证规则和提示
 </code></pre>
 
-### 3. <span id="p3">flux架构</span>
+### <span id="p3">flux架构</span>
 
 ##### Flux是什么
 Flux是Facebook用来构建客户端Web应用的应用架构。它利用 ***单向数据流*** 的方式来组合视图组件。它更像一个模式而不是一个正式的框架
@@ -261,8 +272,27 @@ Flux是Facebook用来构建客户端Web应用的应用架构。它利用 ***单�
 ##### 单向数据流模型
 ![flux架构](http://cc.cocimg.com/api/uploads/20150928/1443408151189585.jpg "Optional title")
 
+1. dispatcher
 
-### 6. <span id="p6">ajax的异常处理，与递归调用</span>
+    事件调度中心，flux模型的中心枢纽，管理着Flux应用中的所有数据流。它本质上是Store的回调注册。每个Store注册它自己并提供一个回调函数。当Dispatcher响应Action时，通过已注册的回调函数，将Action提供的数据负载发送给应用中的所有Store。应用层级单例！！
+
+2. store
+
+    负责封装应用的业务逻辑跟数据的交互。
+
+    Store中包含应用所有的数据
+    Store是应用中唯一的数据发生变更的地方
+    Store中没有赋值接口---所有数据变更都是由dispatcher发送到store，新的数据随着Store触发的change事件传回view。Store对外只暴露getter，不允许提供setter！！禁止在任何地方直接操作Store。
+
+3. view
+
+    controller-view 可以理解成MVC模型中的controller，它一般由应用的顶层容器充当，负责从store中获取数据并将数据传递到子组件中。简单的应用一般只有一个controller-view，复杂应用中也可以有多个。controller-view是应用中唯一可以操作view(UI组件)的地方，职责单一只允许调用action触发事件，数据从由上层容器通过属性传递过来。
+
+
+
+
+
+### <span id="p6">ajax的异常处理，与递归调用</span>
 ##### 在通过xmlHttpRequest对象时（同过ajax的非jsonp访问），处理异常是非常重要的，尤其是递归里调用ajax时。
 * 推荐使用 $.ajax 的方式发起请求，保证代码格式统一，格式明了
 * 对于每一个请求都应该认真对待它的每一个结果
@@ -361,7 +391,7 @@ function demo(i) {
 }
 </code></pre>
 
-### 7. <span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span>
+### <span id="p7">如何用js函数去创建一个对象，并为此函数扩展属性</span>
 
 ###### 优点：
 * 可以缩短函数在调用时书写的长度（如：$("#id")和$.each()都是JQuery函数的使用方式）
@@ -407,7 +437,7 @@ jQuery.extend(demo, {
 })
 </code></pre>
 
-### 8. <span id="p8">js闭包的简单应用</span>
+### <span id="p8">js闭包的简单应用</span>
 
 ###### 优点：
 * 实际开发中可以用像下面这样的方式来创建对象来避免 new 关键字的使用（return返回的对象即为新生成的对象）
